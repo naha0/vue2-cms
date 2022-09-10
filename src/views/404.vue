@@ -1,12 +1,12 @@
 <template>
   <div>
-    menu
+    <h1>404</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'memu',
+  name: '404',
   data () {
     return {
       

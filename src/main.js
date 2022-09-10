@@ -17,6 +17,7 @@ new Vue({
   store,
   beforeCreate(){
     Vue.prototype.$api = api
+    Vue.prototype.$bus = this
   },
   render: h => h(App)
 }).$mount('#app')

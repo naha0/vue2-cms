@@ -2,6 +2,7 @@ import { getLogin } from "@/api";
 
 const state = {
     userData:{},
+    menuData:[]
 
 }
 
@@ -10,6 +11,9 @@ const mutations = {
         state.userData = userData
         window.localStorage.setItem('token',userData.token)
         window.localStorage.setItem('name',userData.name)
+    },
+    getMenuData(state,menuData){
+        state.menuData = menuData
     }
 }
 

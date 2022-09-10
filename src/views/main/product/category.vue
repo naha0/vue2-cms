@@ -1,12 +1,12 @@
 <template>
   <div>
-    menu
+    category
   </div>
 </template>
 
 <script>
 export default {
-  name: 'memu',
+  name: 'category',
   data () {
     return {
       

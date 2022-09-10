@@ -1,12 +1,12 @@
 <template>
   <div>
-    menu
+    goods
   </div>
 </template>
 
 <script>
 export default {
-  name: 'memu',
+  name: 'goods',
   data () {
     return {
       

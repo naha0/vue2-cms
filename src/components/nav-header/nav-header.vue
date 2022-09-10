@@ -5,7 +5,8 @@
       <div class="breadcrumb">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="clickParItem">{{clickParItem.name}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="clickItem">{{clickItem.name}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </div>
@@ -23,8 +24,25 @@ export default {
     User,
   },
   data() {
-    return {};
+    return {
+      clickItem:{},
+      clickParItem:{}
+    };
   },
+  watch:{
+    clickItem:{
+      handler(newValue,oldValue){
+        console.log(newValue);
+      }
+    }
+  },
+  created(){
+    this.$bus.$on('clickItem',(val,parVal)=>{
+      this.clickItem = val
+      this.clickParItem = parVal
+
+    })
+  }
 };
 </script>
 
@@ -38,6 +56,7 @@ export default {
 
   .header-start {
     display: flex;
+    align-items: center;
     .iconFold {
       font-size: 20px;
     }
