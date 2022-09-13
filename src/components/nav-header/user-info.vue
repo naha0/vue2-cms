@@ -35,6 +35,12 @@ export default {
   height: 100%;
   display: flex;
   align-items: center;
+
+  .el-avatar /deep/{
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+  }
   .el-dropdown-link {
     margin-left: 15px;
   }

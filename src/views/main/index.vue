@@ -1,14 +1,16 @@
 <template>
   <div class="home">
     <el-container class="main-content">
-      <el-aside :width="isCollege ? '200px' : '80px'">
-        <nav-menu></nav-menu>
+      <el-aside :width="isCollapse ? '200px' : '60px'">
+        <nav-menu :collapse="isCollapse"></nav-menu>
       </el-aside>
       <el-container>
-        <el-header>
-          <nav-header></nav-header>
+        <el-header style="height:48px">
+          <nav-header @clickFold="clickFold" :collapse="isCollapse"></nav-header>
         </el-header>
-        <el-main>Main</el-main>
+        <el-main style="padding:0 20px 20px 20px">
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -18,18 +20,21 @@
   import NavMenu from '@/components/nav-menu/nav-menu.vue';
   import NavHeader from '@/components/nav-header/nav-header.vue';
 export default {
-  name: "home",
+  name: "main",
   components:{
     NavMenu,
     NavHeader
   },
   data() {
     return {
-        isCollege: true
+        isCollapse: true
     };
   },
-  props:{
-
+  methods:{
+    clickFold(foldBool){
+      console.log(foldBool);
+      this.isCollapse = foldBool
+    }
   }
 }
 </script>

@@ -1,7 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
+// import router from './router'
 import router from './router'
 import store from './store'
+
+// console.log(setupRouter);
+
+
 
 import '@/assets/css/global.css'
 import ElementUI from 'element-ui';
@@ -12,12 +17,14 @@ Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
+const app = new Vue({
   store,
+  router,
   beforeCreate(){
     Vue.prototype.$api = api
     Vue.prototype.$bus = this
   },
   render: h => h(App)
-}).$mount('#app')
+})
+// setupRouter(app)
+app.$mount('#app')

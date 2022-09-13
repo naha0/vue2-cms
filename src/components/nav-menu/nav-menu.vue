@@ -6,22 +6,23 @@
     </div>
     <div class="menu">
       <el-menu
-        default-active="2"
+        default-active="default"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
         background-color="#e7eaee"
+        :collapse="!collapse"
       >
         <el-submenu :index="item.url" v-for="item in menuData" :key="item.id">
           <template slot="title">
             <i :class="item.icon"></i>
-            <span>{{ item.name }}</span>
+            <span class="marginName">{{ item.name }}</span>
           </template>
           <el-menu-item
             :index="subItem.url"
             v-for="subItem in item.children"
             :key="subItem.id"
-            @click="clickMenu(subItem,item)"
+            @click="clickMenu(subItem, item)"
             >{{ subItem.name }}</el-menu-item
           >
         </el-submenu>
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-import { addMenuCom } from "@/utils/tools";
+import { judgeName } from "@/utils/tools";
 import { getMenu } from "@/api";
 export default {
   name: "navMenu",
@@ -41,12 +42,17 @@ export default {
       allRoutes: [],
     };
   },
+  props:{
+    collapse:Boolean
+  },
   methods: {
     async getMenuData() {
       let res = await getMenu();
-      console.log(res);
+      // console.log(res);
       this.menuData = res.data;
-      this.$store.commit('getMenuData',res.data)
+      this.$store.commit("getCurrentRoute",this.$route.path)
+      this.$store.commit("getMenuData", res.data);
+
       // this.menuData.forEach((item) => {
       //   console.log(this.$route);
       //   if (item.children.length > 0 && item.children) {
@@ -65,29 +71,45 @@ export default {
       //   }
       // });
       // this.allRoutes.push();
-      this.$router.addRoute("home", {
-      path:'home/role',
-      name:"role",
-      component:() => import(`@/views/main/system/role.vue`)
-    });
-        console.log(this.$router.getRoutes());
-
+      // this.$router.addRoute('home',{
+      //   path: "/home/role",
+      //   name: "role",
+      //   component: () => import(`@/views/main/system/role.vue`),
+      // });
+      // this.$router.addRoute({
+      //   path: "/:patchMatch(.*)*",
+      //   name: "NotFound",
+      //   component: () => import(/* webpackChunkName: '404' */ "@/views/404.vue"),
+      // })
+      // console.log(this.$router);
+      // console.log(this.$router.getRoutes(),'nav-menu');
     },
     clickMenu(row,parRow) {
-      console.log(row);
-      this.$bus.$emit("clickItem", row,parRow);
+      console.log('--------------');
+      console.log(row,parRow);
+      console.log('--------------');
+      this.$bus.$emit("clickItem", row, parRow);
+      this.$store.commit("getUrlName", row.url.split("/")[3]);
+      console.log(row.url);
+      this.$router.push({path:row.url});
+      // this.$router.push({path:'/home/role'})
+
     },
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
+      const keyItem =  key.split("/")[2]
+      // console.log(keyItem);
+      this.$bus.$emit("parClickItem", judgeName(keyItem));
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
+      this.$bus.$emit("parClickItem", '');
     },
   },
   created() {
     this.getMenuData();
-    
-    console.log(this.$router.getRoutes());
+
+    // console.log(this.$router.getRoutes());
   },
 };
 </script>
@@ -98,10 +120,11 @@ export default {
 
   .logo {
     height: 28px;
-    padding: 12px 10px 8px 10px;
+    padding: 12px 10px 8px 20px;
     display: flex;
     align-items: center;
     background-color: #dde2e7;
+    overflow: hidden;
 
     .img {
       height: 100%;
@@ -109,13 +132,17 @@ export default {
     }
 
     .logo-title {
-      font-weight: 600px;
+      font-weight: 600;
       font-size: 16px;
     }
   }
   .menu {
     background-color: #e7eaee;
     height: calc(100% - 50px);
+
+    .marginName{
+      margin-left: 10px;
+    }
   }
 }
 </style>

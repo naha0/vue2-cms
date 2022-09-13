@@ -1,8 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import store from "../store";
+import createRouterGuards from '@/router/guards'
 
 Vue.use(VueRouter);
+
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
 
 const routes = [
   {
@@ -16,16 +21,37 @@ const routes = [
       import(/* webpackChunkName: 'login' */ "@/views/login/login.vue"),
   },
   {
-    path: "/home",
-    name: "home",
+    path: "/main",
+    name: "main",
     component: () =>
       import(/* webpackChunkName: 'home' */ "@/views/main/index.vue"),
+    // children:[
+    //   {
+    //     path:'role',
+    //     name:'role',
+    //     component:()=>import("@/views/main/system/role.vue")
+    //   }
+    // ]
+    children: [
+      {
+        path: "",
+        redirect: "users",
+      },
+      {
+        path: "users",
+        name:'users',
+        component: () =>
+          import(
+            /* webpackChunkName: 'home' */ "@/views/main/system/users.vue"
+          ),
+      },
+    ],
   },
-  {
-    path: "/:patchMatch(.*)*",
-    name: "404",
-    component: () => import(/* webpackChunkName: '404' */ "@/views/404.vue"),
-  },
+  // {
+  //   path: "/:patchMatch(.*)*",
+  //   name: "404",
+  //   component: () => import(/* webpackChunkName: '404' */ "@/views/404.vue"),
+  // },
 ];
 
 const router = new VueRouter({
@@ -33,52 +59,52 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+// router.addRoute('home',{
+//   path: "/home/role",
+//   name: "role",
+//   component: () => import("@/views/main/system/role.vue"),
+// });
 
-router.beforeEach((to, from, next) => {
-  if (to.path !== "/login") {
-    const token = window.localStorage.getItem("token");
-    if (!token) {
-      console.log(111);
-      next("/login");
-    } else {
-      console.log(222);
-      next();
-      console.log(store.state.main);
-      // if (store.state.main.menuData) {
-      //   console.log('进入menu');
-      //   const firstMenu = store.state.main.menuData;
-      //   console.log(firstMenu);
-      //   firstMenu.forEach((item) => {
-      //     console.log(item);
-      //     console.log(this.$route);
-      //     if (item.children.length > 0 && item.children) {
-      //       item.children.forEach((child) => {
-      //         if (child.type === 2) {
-      //           let newUrl = this.$route.path + child.url.slice(5);
-      //           this.$router.addRoute("home", {
-      //             path: newUrl,
-      //             name: child.url.split("/")[3],
-      //             component: () =>
-      //               import(`@/views/main/${child.url.slice(5)}.vue`),
-      //           });
-      //         }
-      //         console.log(`@/views/main/${child.url.slice(5)}.vue`);
-      //       });
-      //     }
-      //   });
-      // }
-      // routes.push({
-      //   path:'/role',
-      //   name:"role",
-      //   component:() => import('../views/main/system/role.vue')
-      // });
-      // 加入动态路由后，进行跳转
-      // debugger
-      next()
-    }
-  } else {
-    next();
-  }
-});
 
+// 解决重复登录时重复添加路由 或者 高级权限改低级权限时 某些路由已经注入的问题
+// router.selfAddRoutes = (params) => {
+//   const newRouter = createRouter();
+//   router.matcher = newRouter.matcher;
+//   // 新路由实例matcher，赋值给旧路由实例的matcher，（相当于replaceRouter）
+//   if (params) {
+//     router.addRoute(params);
+//   }
+//   router.history.setupListeners();
+// };
+
+// router.addRoute({
+//   path: "/:patchMatch(.*)*",
+//   name: "404",
+//   component: () => import(/* webpackChunkName: '404' */ "@/views/404.vue"),
+// });
+// router.beforeEach(async(to, from, next) => {
+  // if (to.path !== "/login") {
+  //   const token = window.localStorage.getItem("token");
+  //   if (!token) {
+  //     console.log(111);
+  //     next("/login");
+  //   } else {
+  //     console.log(222);
+  //     await store.dispatch("getAllRoute")
+  //     next();
+  //   }
+  // } else {
+  //   next();
+  // }
+// });
+createRouterGuards(router)
 export default router;
+
+
+// export default function router(app){
+//   console.log(app);
+  
+//   Vue.use(router)
+//   // console.log(Vue.use(router));
+//   createRouterGuards(router)
+// }

@@ -1,0 +1,64 @@
+{
+  "path": "/layout",
+  "name": "layout",
+  "children": [
+    {
+      "path": "analysis",
+      "name": "analysis",
+      "children": [
+        {
+          "path": "overview",
+          "name": "overview",
+          "children": [],
+          "redirect": {}
+        },
+        {
+          "path": "dashboard",
+          "name": "dashboard",
+          "children": [],
+          "redirect": {}
+        }
+      ],
+      "redirect": {}
+    },
+    {
+      "path": "system",
+      "name": "system",
+      "children": [
+        { "path": "user", "name": "user", "children": [], "redirect": {} },
+        {
+          "path": "department",
+          "name": "department",
+          "children": [],
+          "redirect": {}
+        },
+        { "path": "menu", "name": "menu", "children": [], "redirect": {} },
+        { "path": "role", "name": "role", "children": [], "redirect": {} }
+      ],
+      "redirect": {}
+    },
+    {
+      "path": "product",
+      "name": "product",
+      "children": [
+        {
+          "path": "category",
+          "name": "category",
+          "children": [],
+          "redirect": {}
+        },
+        { "path": "goods", "name": "goods", "children": [], "redirect": {} }
+      ],
+      "redirect": {}
+    },
+    {
+      "path": "story",
+      "name": "story",
+      "children": [
+        { "path": "chat", "name": "chat", "children": [], "redirect": {} },
+        { "path": "list", "name": "list", "children": [], "redirect": {} }
+      ],
+      "redirect": {}
+    }
+  ]
+}

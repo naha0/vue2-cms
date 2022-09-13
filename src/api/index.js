@@ -14,3 +14,18 @@ export function getMenu(){
         method:'get'
     })
 }
+
+export function getList(url){
+    return request({
+        url:`/api/${url}`,
+        method:'get'
+    })
+}
+
+export function getContentList(url,data){
+    return request({
+        url:`/api/${url}/list`,
+        method:'post',
+        data:data
+    })
+}
