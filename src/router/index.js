@@ -45,6 +45,19 @@ const routes = [
             /* webpackChunkName: 'home' */ "@/views/main/system/users.vue"
           ),
       },
+      {
+        path: "goods",
+        name:'goods',
+        component: () =>
+          import(
+            /* webpackChunkName: 'goods' */ "@/views/main/product/goods.vue"
+          ),
+      },
+      {
+        path:"menu",
+        name:"menu",
+        component:()=>import('@/views/main/system/menu.vue')
+      }
     ],
   },
   // {
@@ -99,12 +112,3 @@ const router = new VueRouter({
 // });
 createRouterGuards(router)
 export default router;
-
-
-// export default function router(app){
-//   console.log(app);
-  
-//   Vue.use(router)
-//   // console.log(Vue.use(router));
-//   createRouterGuards(router)
-// }

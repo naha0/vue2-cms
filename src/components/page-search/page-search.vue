@@ -55,12 +55,8 @@ export default {
       });
       this.$emit('resetQueryClick',this.zFormData)
       console.log(this.zFormData);
-    },
-  },
-  mounted() {
-    this.resetClick()
-    console.log(this.zFormData);
-  },
+    }
+  }
 };
 </script>
 

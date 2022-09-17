@@ -5,11 +5,13 @@
       @emitTableConfig="emitTableConfig"
       v-bind="configData.propList"
     >
-      <template v-for="item in otherSlotName"  #[item.slotName]="row">
-        {{row[item.slotName]}}
+      <template v-for="item in otherSlotName"  #[item.prop]="row">
+        <template v-if="item.slotName">
+          <slot :name="item.slotName" v-bind="row"></slot>
+        </template>
       </template>
       <template #handlerBtn>
-        <el-button @click="addClick">新增用户</el-button>
+        <el-button @click="addClick">新增</el-button>
       </template>
       <template #enable="row">
         <el-button>{{ row.enable == 0 ? "禁用" : "启用" }}</el-button>
@@ -36,7 +38,8 @@ export default {
     return {
       itemListData: [],
       configData: {},
-      otherSlotName:[]
+      otherSlotName:[],
+      foot:'name'
     };
   },
   methods: {

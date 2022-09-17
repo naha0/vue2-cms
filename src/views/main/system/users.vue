@@ -25,7 +25,6 @@ import pageSearch from "@/components/page-search/page-search.vue";
 import pageContent from "@/components/page-content/page-content.vue";
 import pageModel from "@/components/page-model/page-model.vue";
 import { mapGetters, mapState } from "vuex";
-import { nextTick } from "vue";
 export default {
   name: "users",
   components: {
@@ -214,7 +213,7 @@ export default {
         pageName,
         queryInfo: {
           offset: 0,
-          size: this.page.size,
+          size: 10,
         },
       });
     },
@@ -260,18 +259,8 @@ export default {
     }
   },
   computed: {
-    // ...mapState({
-    //   departmentList:state => state.main.departmentList,
-    //   roleList:state => state.main.roleList
-    // })
     ...mapGetters("main", ["departmentOption", "roleOption"]),
     ...mapState("main", ["menuData"]),
-  },
-  mounted() {
-    this.$nextTick(() => {
-      console.log("created获取departmentList", this.departmentOption);
-      console.log(this.menuData);
-    });
   },
   watch: {
     departmentOption: {
@@ -295,6 +284,9 @@ export default {
       },
     },
   },
+  mounted(){
+    this.resetQueryClick()
+  }
 };
 </script>
 

@@ -13,16 +13,19 @@
       border
       style="width: 100%"
       @selection-change="handleSelectionChange"
+      :tree-props="{children: 'children'}"
+      v-bind="tableConfig.childrenProps"
+      row-key="id"
     >
-      <el-table-column type="selection" width="55" align="center"></el-table-column>
-      <el-table-column type="index" label="序号" width="75" align="center"></el-table-column>
+      <el-table-column type="selection" width="55" align="center" v-if="tableConfig.showSelectColumn"></el-table-column>
+      <el-table-column type="index" label="序号" width="75" align="center" v-if="tableConfig.showIndexColumn"></el-table-column>
       <el-table-column  v-bind="item" align="center" show-overflow-tooltip v-for="item in tableConfig.propList" :key="item.prop">
         <template slot-scope="{row}">
-          <slot :name="item.slotName" v-bind="row"></slot>
+          <slot :name="item.slotName" v-bind="row">{{row[item.prop]}}</slot>
         </template>
       </el-table-column>
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="tableData.count">
       <slot name="footer">
         <el-pagination
           @size-change="handleSizeChange"

@@ -56,7 +56,8 @@ export default {
   methods: {
     submitLogin(loginForm) {
       this.$store.dispatch("main/getUser", loginForm);
-      this.$router.push({ path: "/main" });
+      console.log(11111111111);
+      this.$router.push({ path: "/main/system/users" });
     },
     resetLogin() {
       this.loginForm = {

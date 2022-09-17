@@ -26,5 +26,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 this.$set有三个参数：改变的对象，改变对象的属性，要修改完的值
 
 动态路由，未完成
-page-search 查询会报401
+
+组件 -> page-content -> zTable 
+zTable中使用插槽除了选择和序号两列，如果只是需要传值可以通过row.[item.prop]直接得到数据,如果组件中还需要对数据进行处理，就用具名插槽和作用域插槽和动态插槽
+page-content中使用插槽，在users中固定了插槽的名称，除了几个之外过滤成为otherSlotName,把这些再改为具名插槽和作用域插槽和动态插槽
+组件中传入的某一项中有slotName,则这一项需要通过具名插槽和作用域插槽在组件中加入数据处理，
+
 

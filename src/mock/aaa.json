@@ -25,7 +25,7 @@
       "path": "system",
       "name": "system",
       "children": [
-        { "path": "user", "name": "user", "children": [], "redirect": {} },
+        { "path": "users", "name": "users", "children": [], "redirect": {} },
         {
           "path": "department",
           "name": "department",

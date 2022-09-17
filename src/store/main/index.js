@@ -7,7 +7,7 @@ import {
   getRoleData,
   createD,
   updateD,
-  delD
+  delD,
 } from "@/api";
 import { flatRoutes, configRoute, routeMap } from "@/router/guards/permission";
 import router from "@/router";
@@ -30,7 +30,9 @@ const state = {
   allRoute: [],
   comData: "",
   searchQuery: {},
-  editId:0
+  editId:0,
+  goodsList:[],
+  goodsCount:0
 };
 
 const mutations = {
@@ -90,6 +92,12 @@ const mutations = {
   },
   EditId(state,editId){
     state.editId = editId
+  },
+  changeGoodsList(state,goodsList){
+    state.goodsList = goodsList
+  },
+  changeGoodsCount(state,goodsCount){
+    state.goodsCount = goodsCount
   }
 };
 
@@ -102,6 +110,8 @@ const actions = {
     }
   },
   async getAllRoute({ commit }) {
+    
+    window.localStorage.setItem('storageAside', '1')
     let res = await getMenu();
     let routes = flatRoutes(res.data);
     let newRoutes = {};
@@ -114,9 +124,9 @@ const actions = {
         : (newRoutes[cur.name] = true && total.push(cur));
       return total;
     }, []);
-    routes?.forEach((route) => {
+    routes?.map((route) => {
       console.log(route);
-      // router.matcher = new VueRouter().matcher;
+      router.matcher = new VueRouter().matcher;
 
       router.addRoute("main", route);
     });
@@ -127,6 +137,7 @@ const actions = {
   async contentListData({ commit }, payload) {
     console.log(payload);
     let res = await getContentList(payload.pageName, payload.queryInfo);
+    console.log(res);
     console.log(res.data);
     const { list, totalCount } = res.data;
     console.log(list, totalCount);
@@ -198,6 +209,8 @@ const getters = {
         return { list: state.departmentList, count: state.departmentCount } || {}
       case "menu":
         return { list: state.menuList, count: state.menuCount } || {};
+      case "goods":
+        return { list :state.goodsList, count:state.goodsCount } || {}
     }
   },
   departmentOption(state){

@@ -39,7 +39,7 @@
       "children": [
         {
           "id": 2,
-          "url": "/main/system/user",
+          "url": "/main/system/users",
           "name": "用户管理",
           "sort": 100,
           "type": 2,
