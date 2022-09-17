@@ -53,7 +53,7 @@ export default {
       this.searchItem.forEach((item) => {
         this.$set(this.zFormData,item.field,'')
       });
-      this.$emit('resetQueryClick')
+      this.$emit('resetQueryClick',this.zFormData)
       console.log(this.zFormData);
     },
   },

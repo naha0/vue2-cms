@@ -5,8 +5,18 @@
       @searchQueryClick="searchQueryClick"
       @resetQueryClick="resetQueryClick"
     ></page-search>
-    <page-content :contentConfig="tableConfig" @openClick="openClick"></page-content>
-    <page-model :modelConfig="dialogConfig" ref="model" :modelData="allModelData"></page-model>
+    <page-content
+      :contentConfig="tableConfig"
+      @openClick="openClick"
+    ></page-content>
+    <page-model
+      :modelConfig="dialogConfig"
+      ref="model"
+      :modelData="allModelData"
+      @changeModel="changeModel"
+      changeModelValue="changeModelValue"
+      :addOrEdit="addOrEdit"
+    ></page-model>
   </div>
 </template>
 
@@ -14,7 +24,8 @@
 import pageSearch from "@/components/page-search/page-search.vue";
 import pageContent from "@/components/page-content/page-content.vue";
 import pageModel from "@/components/page-model/page-model.vue";
-
+import { mapGetters, mapState } from "vuex";
+import { nextTick } from "vue";
 export default {
   name: "users",
   components: {
@@ -82,7 +93,7 @@ export default {
             prop: "realname",
             label: "真实姓名",
             minWidth: "100",
-            slotName: "realName",
+            slotName: "realname",
           },
           {
             prop: "cellphone",
@@ -169,7 +180,8 @@ export default {
         },
       },
       page: {},
-      allModelData:{}
+      allModelData: {},
+      addOrEdit: false,
     };
   },
   provide() {
@@ -181,21 +193,24 @@ export default {
   methods: {
     searchQueryClick(query) {
       console.log(query);
+      console.log((this.page.currentPage - 1) * this.page.size, this.page.size);
       const pageName = this.$route.name;
-      this.$store.commit("getSearchQuery", query);
-      this.$store.dispatch("contentListData", {
+      this.$store.commit("main/getSearchQuery", query);
+      this.$store.dispatch("main/contentListData", {
         pageName,
         queryInfo: {
           ...query,
-          offset: this.page.currentPage * this.page.size,
+          offset: (this.page.currentPage - 1) * this.page.size,
           size: this.page.size,
         },
       });
     },
-    resetQueryClick() {
+    resetQueryClick(resetData) {
+      console.log("点击了重置");
       const pageName = this.$route.name;
-      this.$store.commit("getSearchQuery", {});
-      this.$store.dispatch("contentListData", {
+      this.$store.commit("main/getSearchQuery", resetData);
+      console.log(resetData);
+      this.$store.dispatch("main/contentListData", {
         pageName,
         queryInfo: {
           offset: 0,
@@ -203,18 +218,82 @@ export default {
         },
       });
     },
-    openClick(changeBool,data){
+    openClick(changeBool, data) {
       console.log(changeBool);
-      this.$refs.model.dialogVisible = true
-      if(changeBool){
-        console.log('修改数据');
-        console.log(data);
-        this.allModelData = data
+      this.$refs.model.dialogVisible = true;
+      console.log('row',data);
+      if (changeBool) {
+        console.log("修改数据");
+        for (const i in data) {
+          console.log(i);
+          this.$set(this.allModelData, i, data[i]);
+        }
         console.log(this.allModelData);
-      }else{
-        console.log('新增数据');
+        this.$store.commit('main/EditId',data.id)
+        // this.allModelData = data;
+        this.addOrEdit = true;
+        console.log("传给page-model的data", data);
+        console.log("传给page-model的数据", this.allModelData);
+        // 是否显示password
+        let isPassword = this.$refs.model.modelConfig.formItems.find(
+          (item) => item.field == "password"
+        );
+        isPassword.isHidden = true;
+      } else {
+        console.log("新增数据");
+        this.dialogConfig.formItems.forEach((item) => {
+          this.$set(this.allModelData, item.field, "");
+        });
+        this.addOrEdit = false;
+        // 是否显示password
+        let isPassword = this.$refs.model.modelConfig.formItems.find(
+          (item) => item.field == "password"
+        );
+        isPassword.isHidden = false;
       }
+    },
+    changeModel(changeBool) {
+      this.$refs.model.dialogVisible = changeBool;
+    },
+    changeModelValue(itemName, val) {
+      console.log("user中得到model改变的值", itemName, val);
     }
+  },
+  computed: {
+    // ...mapState({
+    //   departmentList:state => state.main.departmentList,
+    //   roleList:state => state.main.roleList
+    // })
+    ...mapGetters("main", ["departmentOption", "roleOption"]),
+    ...mapState("main", ["menuData"]),
+  },
+  mounted() {
+    this.$nextTick(() => {
+      console.log("created获取departmentList", this.departmentOption);
+      console.log(this.menuData);
+    });
+  },
+  watch: {
+    departmentOption: {
+      handler(newValue, oldValue) {
+        console.log("watch中监听到的数据", newValue);
+        this.dialogConfig.formItems.forEach((item) => {
+          if (item.field == "departmentId") {
+            item.options = this.departmentOption;
+          }
+        });
+      },
+    },
+    roleOption: {
+      handler(newValue, oldValue) {
+        console.log("watch中监听到的数据", newValue);
+        this.dialogConfig.formItems.forEach((item) => {
+          if (item.field == "roleId") {
+            item.options = this.roleOption;
+          }
+        });
+      },
+    },
   },
 };
 </script>

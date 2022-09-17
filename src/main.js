@@ -17,7 +17,7 @@ Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
-const app = new Vue({
+new Vue({
   store,
   router,
   beforeCreate(){
@@ -25,6 +25,5 @@ const app = new Vue({
     Vue.prototype.$bus = this
   },
   render: h => h(App)
-})
+}).$mount('#app')
 // setupRouter(app)
-app.$mount('#app')

@@ -27,7 +27,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="page.currentPage"
+          :current-page="currentPage"
           :page-sizes="[5, 10, 15, 20]"
           :page-size="page.size"
           layout="total, sizes, prev, pager, next, jumper"
@@ -45,9 +45,10 @@ export default {
   data() {
     return {
       tableConfig: this.AllTableData,
+      currentPage:1,
       page:{
-        size:10,
-        currentPage:1
+        offset:0,
+        size:10
       }
     };
   },
@@ -68,7 +69,8 @@ export default {
       this.page.size = val
     },
     handleCurrentChange(val) {
-      this.page.currentPage = val
+      this.page.offset = (val - 1 )*this.page.size
+      console.log(this.page.offset);
     }
   },
   mounted() {
@@ -87,7 +89,7 @@ export default {
         console.log(newValue);
         console.log(this.$store.state.main);
         console.log(this.searchQuery,this.urlName);
-        this.$store.dispatch("contentListData",{
+        this.$store.dispatch("main/contentListData",{
           pageName:this.urlName,
           queryInfo:{
             ...this.searchQuery,

@@ -12,7 +12,7 @@ export default function setupPermission(router) {
       } else {
         console.log("进入routes");
         // const routes = flatRoutes(menuData.data);
-        const routes = await store.dispatch("getAllRoute");
+        const routes = await store.dispatch("main/getAllRoute");
         console.log("routes", routes);
         // routes?.forEach((route) => {
         //   console.log(route);

@@ -8,37 +8,33 @@
         :inline="true"
         :model="formData"
         class="demo-form-inline"
-        label-width="100px"
+        :label-width="labelWidth"
         ref="form"
-        v-bind="modelConfig"
       >
         <el-col
           v-for="(item, index) in formList"
           :key="index"
           v-bind="colLayout"
-          
         >
-          <el-form-item
-            :label="item.label"
-            v-if="item.type == 'input' || item.type == 'password'"
-          >
-            <el-input
-              v-model="formData[`${item.field}`]"
-              :placeholder="item.placeholder"
-              @input="handleValueChange($event, item.field)"
-              style="width: 100%"
-            ></el-input>
+        <template v-if="item.type == 'input' || item.type == 'password'">
+          <el-form-item :label="item.label" v-if="!item.isHidden">
+              <el-input
+                v-model="formData[`${item.field}`]"
+                :placeholder="item.placeholder"
+                style="width: 100%"
+              ></el-input>
           </el-form-item>
+        </template>
+          
           <el-form-item :label="item.label" v-else-if="item.type == 'select'">
             <el-select
               v-model="formData[`${item.field}`]"
               :placeholder="item.placeholder"
-              @change="handleValueChange($event, item.field)"
-              style="width:100%"
+              style="width: 100%"
             >
               <el-option
                 v-for="option in item.options"
-                :value="option.title"
+                :value="option.value"
                 :key="option.value"
                 >{{ option.title }}</el-option
               >
@@ -53,8 +49,7 @@
               value-format="yyyy-MM-dd hh:mm:ss"
               type="daterange"
               v-bind="item.otherOptions"
-              @change="handleValueChange($event, item.field)"
-              style="width:100%"
+              style="width: 100%"
             >
             </el-date-picker>
           </el-form-item>
@@ -74,7 +69,7 @@ export default {
     return {
       formList: this.AllFormData,
       formData: {},
-      labelWidth: "100px",
+      labelWidth: "120px",
       colLayout: {
         xl: 6,
         lg: 8,
@@ -84,21 +79,21 @@ export default {
       },
     };
   },
-  props:{
-    modelConfig:{
-      type:Object,
-      default:()=>{}
+  props: {
+    modelConfig: {
+      type: Object,
+      default: () => {},
     },
-    modelData:{
-      type:Object,
-      default:()=>{}
-    }
+    modelData: {
+      type: Object,
+      default: () => {},
+    },
   },
   inject: ["AllFormData"],
   methods: {
-    handleValueChange(value, field) {
-      console.log(value, field);
-    },
+    // handleValueChange(value, field) {
+    //   console.log(value, field);
+    // },
   },
   watch: {
     formData: {
@@ -109,12 +104,19 @@ export default {
       deep: true,
     },
   },
-  created(){
-    if(this.modelData){
-    this.formData = this.modelData
-
-    }
-  }
+  created() {
+    this.$nextTick(() => {
+      if (this.modelData && this.modelConfig) {
+        this.formData = this.modelData;
+        console.log("modelConfig", this.modelConfig);
+        const { colLayout, labelWidth, formItems, itemStyle } =
+          this.modelConfig;
+        this.colLayout = colLayout;
+        this.formList = formItems;
+        console.log(colLayout, formItems);
+      }
+    });
+  },
 };
 </script>
 

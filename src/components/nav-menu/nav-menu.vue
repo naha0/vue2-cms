@@ -50,8 +50,8 @@ export default {
       let res = await getMenu();
       // console.log(res);
       this.menuData = res.data;
-      this.$store.commit("getCurrentRoute",this.$route.path)
-      this.$store.commit("getMenuData", res.data);
+      this.$store.commit("main/getCurrentRoute",this.$route.path)
+      this.$store.commit("main/getMenuData", res.data);
 
       // this.menuData.forEach((item) => {
       //   console.log(this.$route);
@@ -89,7 +89,7 @@ export default {
       console.log(row,parRow);
       console.log('--------------');
       this.$bus.$emit("clickItem", row, parRow);
-      this.$store.commit("getUrlName", row.url.split("/")[3]);
+      this.$store.commit("main/getUrlName", row.url.split("/")[3]);
       console.log(row.url);
       this.$router.push({path:row.url});
       // this.$router.push({path:'/home/role'})
