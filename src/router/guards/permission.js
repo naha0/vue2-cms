@@ -1,5 +1,7 @@
 import store from "@/store";
 
+import VueRouter from "vue-router";
+
 export default function setupPermission(router) {
   console.log(221);
 
@@ -19,15 +21,23 @@ export default function setupPermission(router) {
           console.log("routes", routes);
           // routes?.forEach((route) => {
           //   console.log(route);
+          //   router.matcher = new VueRouter().matcher;
+
           //   router.addRoute("main", route);
-          //   //   router.matcher = new VueRouter().matcher;
           // });
-          router.addRoute({
-            path: "/:patchMatch(.*)*",
-            name: "404",
-            component: () =>
-              import(/* webpackChunkName: '404' */ "@/views/404.vue"),
-          });
+          for(const route of routes){
+            console.log(route);
+
+            router.matcher = new VueRouter().matcher;
+
+            router.addRoute("main", route);
+          }
+          // router.addRoute({
+          //   path: "/:patchMatch(.*)*",
+          //   name: "404",
+          //   component: () =>
+          //     import(/* webpackChunkName: '404' */ "@/views/404.vue"),
+          // });
           next();
         } else {
           console.log("没有完全进去");

@@ -9,7 +9,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>修改密码</el-dropdown-item>
-        <el-dropdown-item divided>退出</el-dropdown-item>
+        <el-dropdown-item divided @click.native="loginOut">退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -23,7 +23,13 @@ export default {
       username: "",
     };
   },
-  methods: {},
+  methods: {
+    loginOut(){
+      window.localStorage.clear()
+      this.$router.replace({path:'/login'})
+      console.log(22);
+    }
+  },
   created() {
     this.username = window.localStorage.getItem("name");
   },

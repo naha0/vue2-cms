@@ -80,8 +80,8 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
-// router.addRoute('home',{
-//   path: "/home/role",
+// router.addRoute('main',{
+//   path: "/main/system/role",
 //   name: "role",
 //   component: () => import("@/views/main/system/role.vue"),
 // });

@@ -11,8 +11,7 @@ import {
   getMenuData,
 } from "@/api";
 import { flatRoutes } from "@/router/guards/permission";
-import router from "@/router";
-import VueRouter from "vue-router";
+
 
 const state = {
   userData: {},
@@ -120,12 +119,8 @@ const actions = {
         : (newRoutes[cur.name] = true && total.push(cur));
       return total;
     }, []);
-    routes?.map((route) => {
-      console.log(route);
-      router.matcher = new VueRouter().matcher;
-
-      router.addRoute("main", route);
-    });
+    console.log(routes);
+    
     console.log(res, "menu");
     console.log(routes, "vuexRoutes");
     return routes;

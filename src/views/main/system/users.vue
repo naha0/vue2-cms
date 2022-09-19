@@ -14,7 +14,7 @@
       ref="model"
       :modelData="allModelData"
       @changeModel="changeModel"
-      changeModelValue="changeModelValue"
+      @changeModelValue="changeModelValue"
       :addOrEdit="addOrEdit"
     ></page-model>
   </div>
@@ -181,6 +181,7 @@ export default {
       page: {},
       allModelData: {},
       addOrEdit: false,
+      offset:0
     };
   },
   provide() {
@@ -195,11 +196,16 @@ export default {
       console.log((this.page.currentPage - 1) * this.page.size, this.page.size);
       const pageName = this.$route.name;
       this.$store.commit("main/getSearchQuery", query);
+      this.offset = (this.page.currentPage - 1) * this.page.size
+      if(!this.page.size){
+        this.offset = 0
+        this.page.size = 10
+      }
       this.$store.dispatch("main/contentListData", {
         pageName,
         queryInfo: {
           ...query,
-          offset: (this.page.currentPage - 1) * this.page.size,
+          offset: this.offset,
           size: this.page.size,
         },
       });

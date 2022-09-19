@@ -2,7 +2,6 @@
   <div class="zForm">
     <z-form
       @update:formData="handleValueChange"
-      :formDataExample="zFormData"
     >
       <template #header>
         <h3>高级检索</h3>
@@ -50,9 +49,13 @@ export default {
     },
     resetClick() {
       console.log('resetClick');
-      this.searchItem.forEach((item) => {
-        this.$set(this.zFormData,item.field,'')
-      });
+      // this.searchItem.forEach((item) => {
+      //   this.$set(this.zFormData,item.field,'')
+      // });
+      for(const item in this.zFormData){
+        console.log(item);
+        this.$set(this.zFormData,item,'')
+      }
       this.$emit('resetQueryClick',this.zFormData)
       console.log(this.zFormData);
     }
