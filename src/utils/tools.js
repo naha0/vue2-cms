@@ -18,3 +18,19 @@ export function judgeName(data){
             return ''
     }
 }
+
+// 查看tree里面的叶子节点
+export function getMenuLeafKeys(menuList){
+    const leftKeys = []
+    const getLeafFun = (menuList) => {
+        for(const menu of menuList){
+            if(menu.children){
+                getLeafFun(menu.children)
+            }else{
+                leftKeys.push(menu)
+            }
+        }
+    }
+    getLeafFun(menuList)
+    return leftKeys
+}

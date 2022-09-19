@@ -57,6 +57,14 @@ const routes = [
         path:"menu",
         name:"menu",
         component:()=>import('@/views/main/system/menu.vue')
+      },{
+        path:"dashboard",
+        name:"dashboard",
+        component:()=>import('@/views/main/analysis/dashboard.vue')
+      },{
+        path:'role',
+        name:'role',
+        component:()=>import('@/views/main/system/role.vue')
       }
     ],
   },

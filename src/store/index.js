@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import main from './main'
+import echart from './echart'
 const store = new Vuex.Store({
   state: {
   },
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
   actions: {
   },
   modules: {
-    main
+    main,
+    echart
   }
 })
 

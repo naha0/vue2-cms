@@ -72,3 +72,53 @@ export function delD(urlName,id){
         method:'delete'
     })
 }
+
+export function goodsAmountList(){
+    return request({
+        url:'/api/goods/amount/list',
+        method:'get'
+    })
+}
+
+// 获取菜单数据
+export function getMenuData(){
+    return request({
+        url:'/api/menu/list',
+        method:'post'
+    })
+}
+
+export function goodsCategoryCount(){
+    return request({
+        url:'/api/goods/category/count',
+        method:'get'
+    })
+}
+
+export function goodsCategorySale(){
+    return request({
+        url:'/api/goods/category/sale',
+        method:'get'
+    })
+}
+
+export function goodsCategoryFavor(){
+    return request({
+        url:'/api/goods/category/favor',
+        method:'get'
+    })
+}
+
+export function goodsSaleTop10(){
+    return request({
+        url:'/api/goods/sale/top10',
+        method:'get'
+    })
+}
+
+export function goodsAddressSale(){
+    return request({
+        url:'/api/goods/address/sale',
+        method:'get'
+    })
+}

@@ -1,21 +1,27 @@
-let foo = {
-    name:'张三',
-    age:'18',
-    student:{
-        name:'喜羊羊'
-    }
+// let foo = {
+//     id:'2',
+//     name:'张三',
+//     age:'18',
+//     sex:'男'
+// }
+
+// console.log(foo.hasOwnProperty('sex1'));
+
+const Obj = {
+    name:'张三'
 }
 
-let foo1 = {
-    name:'王五',
-    age:'19'
+for(let i in Obj){
+    // console.log(i);
+    // if(i){
+    //     console.log('有值');
+    //     return 'hhh'
+    // }else{
+    //     console.log('无值');
+    //     return 'xxx'
+    // }
+    console.log('11');
+    return true
 }
-
-let bar = Object.assign(foo,foo1)
-console.log(bar);
-bar.name = '李四'
-console.log(bar);
-console.log(foo);
-bar.student.name = '懒洋洋'
-console.log(bar);
-console.log(foo);
+console.log(22);
+return false

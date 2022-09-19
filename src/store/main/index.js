@@ -8,8 +8,9 @@ import {
   createD,
   updateD,
   delD,
+  getMenuData,
 } from "@/api";
-import { flatRoutes, configRoute, routeMap } from "@/router/guards/permission";
+import { flatRoutes } from "@/router/guards/permission";
 import router from "@/router";
 import VueRouter from "vue-router";
 
@@ -25,7 +26,6 @@ const state = {
   departmentList: [],
   departmentCount: 0,
   menuList: [],
-  menuCount: 0,
   currentRoute: "",
   allRoute: [],
   comData: "",
@@ -43,7 +43,6 @@ const mutations = {
   },
   getMenuData(state, menuData) {
     state.menuData = menuData;
-    console.log(menuData);
   },
   getUrlName(state, urlName) {
     state.urlName = urlName;
@@ -82,9 +81,6 @@ const mutations = {
   },
   changeMenuList(state, menuList) {
     state.menuList = menuList;
-  },
-  changeMenuCount(state, menuCount) {
-    state.menuCount = menuCount;
   },
   getSearchQuery(state, searchQuery) {
     console.log(searchQuery);
@@ -156,6 +152,8 @@ const actions = {
     console.log('changeRoleList',res1.data.list);
     commit('changeRoleList',res1.data.list)
     commit('changeRoleCount',res1.data.totalCount)
+    let res2 = await getMenuData()
+    commit('changeMenuList',res2.data.list)
   },
   async createData({dispatch},pageData){
     console.log(pageData);
@@ -193,7 +191,7 @@ const actions = {
         size:100
       }
     })
-  }
+  },
 };
 
 const getters = {
