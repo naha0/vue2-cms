@@ -9,7 +9,9 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>修改密码</el-dropdown-item>
-        <el-dropdown-item divided @click.native="loginOut">退出</el-dropdown-item>
+        <el-dropdown-item divided @click.native="loginOut"
+          >退出</el-dropdown-item
+        >
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -24,11 +26,11 @@ export default {
     };
   },
   methods: {
-    loginOut(){
-      window.localStorage.clear()
-      this.$router.replace({path:'/login'})
-      console.log(22);
-    }
+    loginOut() {
+      window.localStorage.clear();
+      this.$router.replace({ path: "/login" });
+      window.localStorage.setItem("storageAside", "0");
+    },
   },
   created() {
     this.username = window.localStorage.getItem("name");
@@ -42,7 +44,7 @@ export default {
   display: flex;
   align-items: center;
 
-  .el-avatar /deep/{
+  .el-avatar /deep/ {
     width: 35px;
     height: 35px;
     line-height: 35px;

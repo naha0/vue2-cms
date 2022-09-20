@@ -12,11 +12,9 @@ import {
 } from "@/api";
 import { flatRoutes } from "@/router/permission";
 
-
 const state = {
-  userData: {},
   menuData: [],
-  allRoute:[],
+  allRoute: [],
   urlName: "",
   listData: [],
   usersList: [],
@@ -30,17 +28,12 @@ const state = {
   allRoute: [],
   comData: "",
   searchQuery: {},
-  editId:0,
-  goodsList:[],
-  goodsCount:0
+  editId: 0,
+  goodsList: [],
+  goodsCount: 0,
 };
 
 const mutations = {
-  getUserData(state, userData) {
-    state.userData = userData;
-    window.localStorage.setItem("token", userData.token);
-    window.localStorage.setItem("name", userData.name);
-  },
   getMenuData(state, menuData) {
     state.menuData = menuData;
   },
@@ -86,44 +79,46 @@ const mutations = {
     console.log(searchQuery);
     state.searchQuery = searchQuery;
   },
-  EditId(state,editId){
-    state.editId = editId
+  EditId(state, editId) {
+    state.editId = editId;
   },
-  changeGoodsList(state,goodsList){
-    state.goodsList = goodsList
+  changeGoodsList(state, goodsList) {
+    state.goodsList = goodsList;
   },
-  changeGoodsCount(state,goodsCount){
-    state.goodsCount = goodsCount
-  }
+  changeGoodsCount(state, goodsCount) {
+    state.goodsCount = goodsCount;
+  },
 };
 
 const actions = {
   async getUser({ commit }, data) {
-    let res = await getLogin(data);
-    console.log(res);
-    if (res.code === 0) {
-      commit("getUserData", res.data);
-    }
+    return new Promise((resolve, reject) => {
+      getLogin(data)
+        .then((res) => {
+          if (res.code !== 0) {
+            reject("登录失败");
+          }
+          window.localStorage.setItem("token", res.data.token);
+          window.localStorage.setItem("name", res.data.name);
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   },
   async getAllRoute({ commit }) {
-    
-    window.localStorage.setItem('storageAside', '1')
+    window.localStorage.setItem("storageAside", "1");
     let res = await getMenu();
     let routes = flatRoutes(res.data);
     let newRoutes = {};
-    console.log("routes111", routes);
-
     routes = routes.reduce((total, cur) => {
-      console.log(total);
       newRoutes[cur.name]
         ? ""
         : (newRoutes[cur.name] = true && total.push(cur));
       return total;
     }, []);
-    console.log(routes);
-    commit('AllRoute',routes)
-    console.log(res, "menu");
-    console.log(routes, "vuexRoutes");
+    commit("AllRoute", routes);
     return routes;
   },
   async contentListData({ commit }, payload) {
@@ -139,54 +134,54 @@ const actions = {
     commit(`change${contentName}Count`, totalCount);
     commit("getUrlName", payload.pageName);
   },
-  async initData({commit}){
-    let res = await getDepartmentData()
-    console.log(res);   
-    commit('changeDepartmentList',res.data.list)
-    commit('changeDepartmentCount',res.data.totalCount)
-    let res1 = await getRoleData()
-    console.log('changeRoleList',res1.data.list);
-    commit('changeRoleList',res1.data.list)
-    commit('changeRoleCount',res1.data.totalCount)
-    let res2 = await getMenuData()
-    commit('changeMenuList',res2.data.list)
-  },
-  async createData({dispatch},pageData){
-    console.log(pageData);
-    let res = await createD(pageData.urlName,pageData.newData)
+  async initData({ commit }) {
+    let res = await getDepartmentData();
     console.log(res);
-    dispatch('contentListData',{
-      pageName:pageData.urlName,
-      queryInfo:{
-        offset:0,
-        size:100
-      }
-    })
+    commit("changeDepartmentList", res.data.list);
+    commit("changeDepartmentCount", res.data.totalCount);
+    let res1 = await getRoleData();
+    console.log("changeRoleList", res1.data.list);
+    commit("changeRoleList", res1.data.list);
+    commit("changeRoleCount", res1.data.totalCount);
+    let res2 = await getMenuData();
+    commit("changeMenuList", res2.data.list);
   },
-  async updateData({dispatch},pageData){
-    let res= await updateD(pageData.urlName,pageData.editData)
+  async createData({ dispatch }, pageData) {
+    console.log(pageData);
+    let res = await createD(pageData.urlName, pageData.newData);
+    console.log(res);
+    dispatch("contentListData", {
+      pageName: pageData.urlName,
+      queryInfo: {
+        offset: 0,
+        size: 100,
+      },
+    });
+  },
+  async updateData({ dispatch }, pageData) {
+    let res = await updateD(pageData.urlName, pageData.editData);
     console.log(pageData);
     console.log(res);
-    let pageName = pageData.urlName.split('/')[0]
+    let pageName = pageData.urlName.split("/")[0];
     console.log(pageName);
-    dispatch('contentListData',{
-      pageName:pageName,
-      queryInfo:{
-        offset:0,
-        size:100
-      }
-    })
+    dispatch("contentListData", {
+      pageName: pageName,
+      queryInfo: {
+        offset: 0,
+        size: 100,
+      },
+    });
   },
-  async deleteData({dispatch},pageData){
-    let res = await delD(pageData.urlName,pageData.id)
+  async deleteData({ dispatch }, pageData) {
+    let res = await delD(pageData.urlName, pageData.id);
     console.log(res);
-    dispatch('contentListData',{
-      pageName:pageData.urlName,
-      queryInfo:{
-        offset:0,
-        size:100
-      }
-    })
+    dispatch("contentListData", {
+      pageName: pageData.urlName,
+      queryInfo: {
+        offset: 0,
+        size: 100,
+      },
+    });
   },
 };
 
@@ -200,25 +195,27 @@ const getters = {
       case "role":
         return { list: state.roleList, count: state.roleCount } || {};
       case "department":
-        return { list: state.departmentList, count: state.departmentCount } || {}
+        return (
+          { list: state.departmentList, count: state.departmentCount } || {}
+        );
       case "menu":
         return { list: state.menuList, count: state.menuCount } || {};
       case "goods":
-        return { list :state.goodsList, count:state.goodsCount } || {}
+        return { list: state.goodsList, count: state.goodsCount } || {};
     }
   },
-  departmentOption(state){
-    let handlerDepartment = state.departmentList.map(item=>{
-      return {value:item.id,title:item.name}
-    })
-    return handlerDepartment || []
+  departmentOption(state) {
+    let handlerDepartment = state.departmentList.map((item) => {
+      return { value: item.id, title: item.name };
+    });
+    return handlerDepartment || [];
   },
-  roleOption(state){
-    let handlerRole = state.roleList.map(item=>{
-      return {value:item.id,title:item.name}
-    })
-    return handlerRole || []
-  }
+  roleOption(state) {
+    let handlerRole = state.roleList.map((item) => {
+      return { value: item.id, title: item.name };
+    });
+    return handlerRole || [];
+  },
 };
 export default {
   namespaced: true,
