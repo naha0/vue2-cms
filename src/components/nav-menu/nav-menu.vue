@@ -52,37 +52,6 @@ export default {
       this.menuData = res.data;
       this.$store.commit("main/getCurrentRoute",this.$route.path)
       this.$store.commit("main/getMenuData", res.data);
-
-      // this.menuData.forEach((item) => {
-      //   console.log(this.$route);
-      //   if (item.children.length > 0 && item.children) {
-      //     item.children.forEach((child) => {
-      //       if (child.type === 2) {
-      //         let newUrl = this.$route.path + child.url.slice(5);
-      //         console.log(654);
-      //         this.$router.addRoute('home',{
-      //           path:newUrl,
-      //           name:child.url.split('/')[3],
-      //           component:()=>import(`../../views/main/${child.url.slice(5)}.vue`)
-      //         })
-      //       }
-      //       console.log(`@/views/main/${child.url.slice(5)}.vue`);
-      //     });
-      //   }
-      // });
-      // this.allRoutes.push();
-      // this.$router.addRoute('home',{
-      //   path: "/home/role",
-      //   name: "role",
-      //   component: () => import(`@/views/main/system/role.vue`),
-      // });
-      // this.$router.addRoute({
-      //   path: "/:patchMatch(.*)*",
-      //   name: "NotFound",
-      //   component: () => import(/* webpackChunkName: '404' */ "@/views/404.vue"),
-      // })
-      // console.log(this.$router);
-      // console.log(this.$router.getRoutes(),'nav-menu');
     },
     clickMenu(row,parRow) {
       console.log('--------------');
@@ -91,6 +60,9 @@ export default {
       this.$bus.$emit("clickItem", row, parRow);
       this.$store.commit("main/getUrlName", row.url.split("/")[3]);
       console.log(row.url);
+      if(row.url==='/main/system/user'){
+        row.url = '/main/system/users'
+      }
       this.$router.push({path:row.url});
       // this.$router.push({path:'/home/role'})
 

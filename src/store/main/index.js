@@ -10,12 +10,13 @@ import {
   delD,
   getMenuData,
 } from "@/api";
-import { flatRoutes } from "@/router/guards/permission";
+import { flatRoutes } from "@/router/permission";
 
 
 const state = {
   userData: {},
   menuData: [],
+  allRoute:[],
   urlName: "",
   listData: [],
   usersList: [],
@@ -53,7 +54,7 @@ const mutations = {
   getCurrentRoute(state, currentRoute) {
     state.currentRoute = currentRoute;
   },
-  GetAllRoute(state, allRoute) {
+  AllRoute(state, allRoute) {
     state.allRoute = allRoute;
   },
   getRouteCom(state, comData) {
@@ -120,7 +121,7 @@ const actions = {
       return total;
     }, []);
     console.log(routes);
-    
+    commit('AllRoute',routes)
     console.log(res, "menu");
     console.log(routes, "vuexRoutes");
     return routes;

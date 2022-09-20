@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import createRouterGuards from '@/router/guards'
+import setupPermission from './permission'
+
 
 Vue.use(VueRouter);
 
@@ -25,98 +26,29 @@ const routes = [
     name: "main",
     component: () =>
       import(/* webpackChunkName: 'home' */ "@/views/main/index.vue"),
-    // children:[
-    //   {
-    //     path:'role',
-    //     name:'role',
-    //     component:()=>import("@/views/main/system/role.vue")
-    //   }
-    // ]
-    children: [
-      {
-        path: "",
-        redirect: "users",
-      },
-      {
-        path: "users",
-        name:'users',
-        component: () =>
-          import(
-            /* webpackChunkName: 'home' */ "@/views/main/system/users.vue"
-          ),
-      },
-      {
-        path: "goods",
-        name:'goods',
-        component: () =>
-          import(
-            /* webpackChunkName: 'goods' */ "@/views/main/product/goods.vue"
-          ),
-      },
-      {
-        path:"menu",
-        name:"menu",
-        component:()=>import('@/views/main/system/menu.vue')
-      },{
-        path:"dashboard",
-        name:"dashboard",
-        component:()=>import('@/views/main/analysis/dashboard.vue')
-      },{
-        path:'role',
-        name:'role',
-        component:()=>import('@/views/main/system/role.vue')
-      }
-    ],
+      children:[]
   },
-  // {
-  //   path: "/:patchMatch(.*)*",
-  //   name: "404",
-  //   component: () => import(/* webpackChunkName: '404' */ "@/views/404.vue"),
-  // },
 ];
+
+
+// 动态路由只能添加一次
+window.localStorage.setItem("storageAside", "0");
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
 });
-// router.addRoute('main',{
-//   path: "/main/system/role",
-//   name: "role",
-//   component: () => import("@/views/main/system/role.vue"),
-// });
 
+router.reloadRouter = function () {
+  console.log('重置路由');
+  router.matcher = new VueRouter({
+    mode: "history",
+    routes
+  }).matcher
+}
+setupPermission(router)
 
-// 解决重复登录时重复添加路由 或者 高级权限改低级权限时 某些路由已经注入的问题
-// router.selfAddRoutes = (params) => {
-//   const newRouter = createRouter();
-//   router.matcher = newRouter.matcher;
-//   // 新路由实例matcher，赋值给旧路由实例的matcher，（相当于replaceRouter）
-//   if (params) {
-//     router.addRoute(params);
-//   }
-//   router.history.setupListeners();
-// };
+console.log('不放定时器的全部',router.getRoutes());
 
-// router.addRoute({
-//   path: "/:patchMatch(.*)*",
-//   name: "404",
-//   component: () => import(/* webpackChunkName: '404' */ "@/views/404.vue"),
-// });
-// router.beforeEach(async(to, from, next) => {
-  // if (to.path !== "/login") {
-  //   const token = window.localStorage.getItem("token");
-  //   if (!token) {
-  //     console.log(111);
-  //     next("/login");
-  //   } else {
-  //     console.log(222);
-  //     await store.dispatch("getAllRoute")
-  //     next();
-  //   }
-  // } else {
-  //   next();
-  // }
-// });
-createRouterGuards(router)
 export default router;
