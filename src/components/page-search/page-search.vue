@@ -1,8 +1,6 @@
 <template>
   <div class="zForm">
-    <z-form
-      @update:formData="handleValueChange"
-    >
+    <z-form @update:formData="handleValueChange" ref="form">
       <template #header>
         <h3>高级检索</h3>
       </template>
@@ -41,32 +39,30 @@ export default {
     handleValueChange(val) {
       // this.zFormData = val
       // this.zFormData = { ...this.zFormData,...val}
-      Object.assign(this.zFormData,val)
+      Object.assign(this.zFormData, val);
     },
     searchClick() {
       console.log(this.zFormData);
-      this.$emit('searchQueryClick',this.zFormData)
+      this.$emit("searchQueryClick", this.zFormData);
     },
     resetClick() {
-      console.log('resetClick');
-      // this.searchItem.forEach((item) => {
-      //   this.$set(this.zFormData,item.field,'')
-      // });
-      for(const item in this.zFormData){
-        console.log(item);
-        this.$set(this.zFormData,item,'')
-      }
-      this.$emit('resetQueryClick',this.zFormData)
-      console.log(this.zFormData);
-    }
-  }
+      this.$nextTick(() => {
+        console.log("resetClick");
+        for (const item in this.zFormData) {
+          this.$refs.form.formData[item] = "";
+        }
+        this.$emit("resetQueryClick", this.zFormData);
+        console.log(this.zFormData);
+      });
+    },
+  },
 };
 </script>
 
 <style scoped lang="less">
 .zForm {
   // height: 250px;
-  
+
   background-color: #fff;
   padding: 20px 0;
 
