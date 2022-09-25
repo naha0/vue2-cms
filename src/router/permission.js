@@ -16,15 +16,16 @@ export default function setupPermission(router) {
           console.log("进入routes");
           const routes = await store.dispatch("main/getAllRoute");
           router.reloadRouter();
-          for (const route of routes) {
-            router.addRoute("main", route);
-          }
           router.addRoute({
             path: "/:patchMatch(.*)*",
             name: "404",
             component: () =>
               import(/* webpackChunkName: '404' */ "@/views/404.vue"),
           });
+          for (const route of routes) {
+            router.addRoute("main", route);
+          }
+          
           console.log("全部路由", router.getRoutes());
           next({ ...to, replace: true });
         }

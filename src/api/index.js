@@ -8,9 +8,16 @@ export function getLogin(data){
     })
 }
 
-export function getMenu(){
+export function getUser(id){
     return request({
-        url:"/api/role/1/menu",
+        url:`/api/users/${id}`,
+        method:'get'
+    })
+}
+
+export function getMenu(id){
+    return request({
+        url:`/api/role/${id}/menu`,
         method:'get'
     })
 }

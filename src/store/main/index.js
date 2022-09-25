@@ -1,5 +1,6 @@
 import {
   getLogin,
+  getUser,
   getList,
   getMenu,
   getContentList,
@@ -14,6 +15,7 @@ import { flatRoutes } from "@/router/permission";
 
 const state = {
   menuData: [],
+  userId:'',
   allRoute: [],
   urlName: "",
   listData: [],
@@ -39,6 +41,9 @@ const mutations = {
   },
   getUrlName(state, urlName) {
     state.urlName = urlName;
+  },
+  UserId(state,userId){
+    state.userId = userId
   },
   gerListData(state, listData) {
     state.listData = listData;
@@ -98,18 +103,23 @@ const actions = {
           if (res.code !== 0) {
             reject("登录失败");
           }
+          console.log("登录成功");
           window.localStorage.setItem("token", res.data.token);
           window.localStorage.setItem("name", res.data.name);
-          resolve(res);
+          return getUser(res.data.id)
+        })
+        .then((res)=>{
+          commit('UserId',res.data.role.id)
+          resolve(res.data.role.id)
         })
         .catch((err) => {
           reject(err);
         });
     });
   },
-  async getAllRoute({ commit }) {
+  async getAllRoute({ commit,state }) {
     window.localStorage.setItem("storageAside", "1");
-    let res = await getMenu();
+    let res = await getMenu(state.userId);
     let routes = flatRoutes(res.data);
     let newRoutes = {};
     routes = routes.reduce((total, cur) => {

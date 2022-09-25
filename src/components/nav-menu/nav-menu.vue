@@ -6,7 +6,7 @@
     </div>
     <div class="menu">
       <el-menu
-        default-active="default"
+        :default-active="allRoute[0].path"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
@@ -34,12 +34,12 @@
 <script>
 import { judgeName } from "@/utils/tools";
 import { getMenu } from "@/api";
+import { mapState } from "vuex";
 export default {
   name: "navMenu",
   data() {
     return {
       menuData: [],
-      allRoutes: [],
     };
   },
   props:{
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     async getMenuData() {
-      let res = await getMenu();
+      let res = await getMenu(this.userId);
       // console.log(res);
       this.menuData = res.data;
       this.$store.commit("main/getCurrentRoute",this.$route.path)
@@ -80,9 +80,10 @@ export default {
   },
   created() {
     this.getMenuData();
-
-    // console.log(this.$router.getRoutes());
   },
+  computed:{
+    ...mapState('main',['userId','allRoute'])
+  }
 };
 </script>
 

@@ -56,7 +56,7 @@ export default {
   methods: {
     async submitLogin(loginForm) {
       await this.$store.dispatch("main/getUser", loginForm);
-      this.$router.push({ name: "users" });
+      this.$router.push({ name:'overview' });
     },
     resetLogin() {
       this.loginForm = {
